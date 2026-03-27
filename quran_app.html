@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>القرآن — Quranic Vocabulary</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5efe4;--bg2:#ede4d3;--surf:#fdfaf3;
+  --bdr:#d5c8ae;--bdr2:#c3b491;
+  --grn:#1b5c38;--grn2:#26794d;--grn3:#38a06e;--grnlt:#e6f2eb;
+  --teal:#165858;--teal2:#1f7070;--tealt:#e0f0f0;
+  --gold:#7d5c10;--gold2:#b8901c;--goldlt:#fdf0d0;
+  --rust:#7a3015;
+  --txt:#2b1d0c;--txt2:#58412a;--mut:#806448;
+  --r:14px;
+  --shd:0 2px 12px rgba(0,0,0,.08),0 1px 3px rgba(0,0,0,.05);
+  --shd2:0 6px 24px rgba(0,0,0,.10),0 2px 6px rgba(0,0,0,.06);
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--txt);font-family:'Source Serif 4',Georgia,serif;font-size:15px}
+.app{max-width:520px;margin:0 auto;min-height:100vh;padding-bottom:90px}
+button{font-family:'Source Serif 4',Georgia,serif}
+
+/* HEADER */
+.hdr{padding:18px 18px 0}
+.hdr-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.logo{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--grn)}
+.logo-sub{font-size:10px;text-transform:uppercase;letter-spacing:2.5px;color:var(--mut);margin-top:1px}
+.chips{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:20px;font-size:11px;font-weight:600;border:1px solid var(--bdr);background:var(--surf);color:var(--txt2);cursor:default;white-space:nowrap}
+.chip-fire{background:#fff7ed;border-color:#f4a245;color:#92400e}
+.chip-xp{background:var(--grnlt);border-color:var(--grn3);color:var(--grn)}
+.chip-badge{background:var(--goldlt);border-color:var(--gold2);color:var(--gold);cursor:pointer}
+.xpbar-outer{width:50px;background:var(--bdr);border-radius:10px;height:5px;overflow:hidden;display:inline-block;vertical-align:middle;margin-left:3px}
+.xpbar-inner{height:100%;background:linear-gradient(90deg,var(--grn),var(--grn3));transition:width .5s}
+
+/* DAILY GOAL */
+.goal-wrap{margin:12px 18px 0;background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:11px 14px}
+.goal-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.goal-lbl{font-size:12px;font-weight:600;color:var(--txt2)}
+.goal-cnt{font-size:12px;color:var(--mut)}
+.gtrack{background:var(--bg2);border-radius:20px;height:7px;overflow:hidden}
+.gfill{height:100%;border-radius:20px;transition:width .4s;background:linear-gradient(90deg,var(--grn2),var(--grn3))}
+.gfill.done{background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.gdone{font-size:11px;color:var(--gold);font-weight:600;margin-top:5px;text-align:center;letter-spacing:.3px}
+
+/* AYAH CARD */
+.ayah-card{margin:10px 18px 0;background:linear-gradient(135deg,var(--grn),var(--teal));border-radius:var(--r);padding:13px 16px;color:#fff}
+.ayah-ar{font-family:'Amiri',serif;font-size:17px;direction:rtl;line-height:1.7;color:#d1f0dc;text-align:right;margin-bottom:4px}
+.ayah-en{font-size:11px;color:rgba(255,255,255,.78);font-style:italic}
+.ayah-src{font-size:10px;color:rgba(255,255,255,.5);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+
+/* TABS */
+.tabs{display:flex;gap:7px;padding:12px 18px 0}
+.tbtn{flex:1;padding:10px;border:1px solid var(--bdr);background:var(--surf);color:var(--mut);border-radius:var(--r);font-family:'Playfair Display',serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+.tbtn.on{background:var(--grn);border-color:var(--grn);color:#fff}
+
+/* MODE BAR */
+.mbar{display:flex;gap:6px;padding:9px 18px 0;align-items:center}
+.mbtn{padding:6px 13px;border-radius:20px;border:1px solid var(--bdr);background:transparent;color:var(--mut);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:.4px}
+.mbtn.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.qbadge{margin-left:auto;font-size:11px;color:var(--mut);display:flex;align-items:center;gap:4px}
+.qdot{width:6px;height:6px;border-radius:50%;background:var(--rust)}
+
+/* FILTERS */
+.filts{display:flex;gap:5px;padding:7px 18px 0;overflow-x:auto;scrollbar-width:none}
+.filts::-webkit-scrollbar{display:none}
+.filt{white-space:nowrap;padding:3px 9px;border-radius:14px;border:1px solid var(--bdr);background:transparent;color:var(--mut);font-size:10px;font-weight:600;cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:.4px}
+.filt.on{background:var(--goldlt);border-color:var(--gold2);color:var(--gold)}
+
+/* SR STATS */
+.srstats{display:flex;gap:7px;margin:9px 18px 0}
+.srstat{flex:1;background:var(--surf);border:1px solid var(--bdr);border-radius:10px;padding:7px 8px;text-align:center}
+.srnum{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--grn)}
+.srlbl{font-size:9px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
+
+/* MAIN */
+.main{padding:12px 18px 0}
+
+/* PROGRESS BAR */
+.pbwrap{margin-bottom:10px}
+.pbtop{display:flex;justify-content:space-between;font-size:11px;color:var(--mut);margin-bottom:4px}
+.pbtrack{background:var(--bg2);border-radius:20px;height:5px;overflow:hidden}
+.pbfill{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--teal),var(--grn3));transition:width .5s}
+
+/* FLASHCARD */
+.card{background:var(--surf);border:1px solid var(--bdr);border-radius:20px;padding:28px 24px 22px;min-height:230px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;box-shadow:var(--shd2);transition:box-shadow .2s,transform .15s;position:relative;overflow:hidden;width:100%}
+.card:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(0,0,0,.11)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--grn),var(--teal));border-radius:20px 20px 0 0}
+.card.mast::before{background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.card.phrase-card{min-height:270px}
+.cbadge{position:absolute;top:14px;right:12px;font-size:9px;font-weight:700;padding:2px 7px;border-radius:8px;text-transform:uppercase;letter-spacing:.5px}
+.bnew{background:var(--grnlt);color:var(--grn);border:1px solid var(--grn3)}
+.brev{background:var(--tealt);color:var(--teal);border:1px solid var(--teal2)}
+.bmast{background:var(--goldlt);color:var(--gold);border:1px solid var(--gold2)}
+.cfreq{position:absolute;top:14px;left:12px;font-size:9px;color:var(--mut);background:var(--bg2);border-radius:7px;padding:2px 6px}
+.cdiff{position:absolute;top:14px;left:12px;font-size:9px;font-weight:700;padding:2px 7px;border-radius:7px;text-transform:uppercase;letter-spacing:.3px}
+.diff-b{background:#dcfce7;color:#166534}
+.diff-i{background:#fef9c3;color:#854d0e}
+.diff-a{background:#fee2e2;color:#991b1b}
+.ccat{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--mut);margin-bottom:12px;font-weight:600}
+.car{font-family:'Amiri',serif;font-size:clamp(36px,9vw,52px);color:var(--grn);direction:rtl;line-height:1.4;margin-bottom:7px}
+.carp{font-family:'Amiri',serif;font-size:clamp(18px,5vw,24px);color:var(--grn);direction:rtl;line-height:1.8;margin-bottom:10px}
+.ctr{font-style:italic;color:var(--mut);font-size:13px;margin-bottom:3px;font-weight:300}
+.chint{font-size:11px;color:var(--bdr2);margin-top:12px;letter-spacing:.3px}
+.cblbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--mut);margin-bottom:9px}
+.cen{font-size:clamp(15px,4vw,21px);font-weight:600;color:var(--txt);margin-bottom:6px;line-height:1.4}
+.cctx{font-size:12px;color:var(--mut);border-top:1px solid var(--bdr);padding-top:10px;margin-top:10px;line-height:1.6;max-width:340px;font-style:italic}
+.cint{font-size:10px;color:var(--teal2);margin-top:8px}
+.cseen{font-size:10px;color:var(--mut);margin-top:5px}
+
+/* SR RATING BUTTONS */
+.srbr{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:11px}
+.srb{padding:9px 5px;border-radius:10px;border:1px solid;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;text-align:center;line-height:1.2}
+.srb .hint{display:block;font-size:9px;font-weight:400;opacity:.7;margin-top:1px;text-transform:uppercase;letter-spacing:.2px}
+.again{background:#fee2e2;border-color:#fca5a5;color:#991b1b}.again:hover{background:#fecaca}
+.hard{background:#ffedd5;border-color:#fdba74;color:#9a3412}.hard:hover{background:#fed7aa}
+.good{background:var(--grnlt);border-color:var(--grn3);color:var(--grn)}.good:hover{background:#bbf7d0}
+.easy{background:var(--goldlt);border-color:var(--gold2);color:var(--gold)}.easy:hover{background:#fde68a}
+
+/* FLIP ROW */
+.flrow{display:flex;gap:7px;margin-top:11px}
+.btn{flex:1;padding:11px;border-radius:var(--r);border:1px solid var(--bdr);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;background:var(--surf);color:var(--txt2)}
+.btn:hover{background:var(--bg2)}
+.btn-skip{background:transparent;color:var(--mut);border-color:transparent}
+.btn-skip:hover{color:var(--txt2);background:transparent}
+.btn-primary{background:var(--grn);color:#fff;border-color:var(--grn)}
+.btn-primary:hover{background:var(--grn2)}
+
+/* EMPTY */
+.empty{text-align:center;padding:48px 20px;color:var(--mut)}
+.empty h3{font-family:'Playfair Display',serif;font-size:20px;color:var(--grn);margin-bottom:8px}
+
+/* QUIZ */
+.qhdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}
+.qscore-lbl{font-family:'Playfair Display',serif;font-size:20px;color:var(--grn)}
+.qprog{font-size:12px;color:var(--mut)}
+.qcard{background:var(--surf);border:1px solid var(--bdr);border-radius:20px;padding:26px;text-align:center;margin-bottom:13px;box-shadow:var(--shd)}
+.qar{font-family:'Amiri',serif;font-size:clamp(32px,9vw,50px);color:var(--grn);direction:rtl;line-height:1.4;margin-bottom:5px}
+.qarp{font-family:'Amiri',serif;font-size:clamp(16px,5vw,21px);color:var(--grn);direction:rtl;line-height:1.8;margin-bottom:5px}
+.qtr{font-style:italic;color:var(--mut);font-size:12px}
+.qlbl{font-size:12px;color:var(--mut);margin-top:7px}
+.qopts{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.qopt{padding:12px 9px;border-radius:11px;border:1px solid var(--bdr);background:var(--surf);color:var(--txt2);font-size:11px;cursor:pointer;transition:all .2s;text-align:center;line-height:1.4}
+.qopt:hover:not(:disabled){border-color:var(--grn2);background:var(--grnlt)}
+.qopt.correct{background:#dcfce7;border-color:#4ade80;color:#166534;font-weight:700}
+.qopt.wrong{background:#fee2e2;border-color:#f87171;color:#991b1b}
+.qopt:disabled{cursor:default}
+.qresult{text-align:center;padding:32px 20px}
+.remi{font-size:60px;margin-bottom:12px}
+.rscore{font-family:'Playfair Display',serif;font-size:48px;color:var(--grn)}
+.rmsg{color:var(--mut);font-size:14px;font-style:italic;margin-bottom:22px;margin-top:4px}
+.rbr{display:flex;gap:8px;justify-content:center}
+
+/* BADGES OVERLAY */
+.bov{position:fixed;inset:0;background:rgba(20,12,4,.55);z-index:200;display:flex;align-items:flex-end;justify-content:center}
+.bsheet{background:var(--surf);border-radius:22px 22px 0 0;padding:22px 18px 38px;width:100%;max-width:520px;max-height:75vh;overflow-y:auto;box-shadow:0 -8px 40px rgba(0,0,0,.2)}
+.btitle{font-family:'Playfair Display',serif;font-size:21px;color:var(--grn);text-align:center;margin-bottom:16px}
+.bgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.bitem{display:flex;gap:9px;align-items:center;padding:11px;background:var(--bg);border:1px solid var(--bdr);border-radius:11px;transition:all .2s}
+.bitem.earn{border-color:var(--gold2);background:var(--goldlt)}
+.bicon{font-size:22px;flex-shrink:0}
+.bname{font-size:11px;font-weight:700;color:var(--txt2)}
+.bdesc{font-size:10px;color:var(--mut);margin-top:1px}
+.bitem:not(.earn){opacity:.38}
+
+/* FAB */
+.fab{position:fixed;bottom:22px;right:18px;width:46px;height:46px;border-radius:50%;background:var(--goldlt);border:1px solid var(--gold2);color:var(--gold);font-size:20px;cursor:pointer;box-shadow:var(--shd2);transition:transform .2s;z-index:100;display:flex;align-items:center;justify-content:center}
+.fab:hover{transform:scale(1.1)}
+
+/* NOTIFICATION */
+.notif{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:999;padding:9px 18px;border-radius:28px;font-size:13px;font-weight:600;box-shadow:var(--shd2);animation:sli .25s ease;white-space:nowrap;pointer-events:none}
+.notif.ok{background:var(--surf);border:1px solid var(--grn3);color:var(--grn)}
+.notif.gold{background:var(--goldlt);border:1px solid var(--gold2);color:var(--gold)}
+.notif.warn{background:#fff7ed;border:1px solid #fdba74;color:#9a3412}
+@keyframes sli{from{opacity:0;transform:translateX(-50%) translateY(-9px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+@media(max-width:380px){
+  .qopts{grid-template-columns:1fr}
+  .bgrid{grid-template-columns:1fr}
+  .srbr{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<div id="notif-container"></div>
+<button class="fab" id="fab-badges">🏆</button>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+const WORDS = [
+  {id:1,ar:"وَ",tr:"wa",en:"and",cat:"Particles",freq:47439},
+  {id:2,ar:"فِي",tr:"fī",en:"in / within",cat:"Particles",freq:1705},
+  {id:3,ar:"مِن",tr:"min",en:"from / of",cat:"Particles",freq:3226},
+  {id:4,ar:"عَلَى",tr:"ʿalā",en:"on / upon",cat:"Particles",freq:1399},
+  {id:5,ar:"إِلَى",tr:"ilā",en:"to / towards",cat:"Particles",freq:742},
+  {id:6,ar:"عَن",tr:"ʿan",en:"about / from",cat:"Particles",freq:552},
+  {id:7,ar:"بِ",tr:"bi",en:"by / with",cat:"Particles",freq:3544},
+  {id:8,ar:"لِ",tr:"li",en:"for / to",cat:"Particles",freq:1250},
+  {id:9,ar:"لَا",tr:"lā",en:"no / not",cat:"Particles",freq:5631},
+  {id:10,ar:"إِنَّ",tr:"inna",en:"indeed / verily",cat:"Particles",freq:1706},
+  {id:11,ar:"أَن",tr:"an",en:"that / to (verb)",cat:"Particles",freq:2163},
+  {id:12,ar:"ثُمَّ",tr:"thumma",en:"then / afterwards",cat:"Particles",freq:338},
+  {id:13,ar:"أَو",tr:"aw",en:"or",cat:"Particles",freq:449},
+  {id:14,ar:"بَل",tr:"bal",en:"nay / rather",cat:"Particles",freq:133},
+  {id:15,ar:"مَع",tr:"maʿa",en:"with / together with",cat:"Particles",freq:183},
+  {id:16,ar:"بَعْد",tr:"baʿd",en:"after",cat:"Particles",freq:135},
+  {id:17,ar:"قَبْل",tr:"qabl",en:"before",cat:"Particles",freq:140},
+  {id:18,ar:"ذَٰلِك",tr:"dhālika",en:"that (demonstrative)",cat:"Particles",freq:1390},
+  {id:19,ar:"هَٰذَا",tr:"hādhā",en:"this (demonstrative)",cat:"Particles",freq:609},
+  {id:20,ar:"إِذَا",tr:"idhā",en:"when / if",cat:"Particles",freq:407},
+  {id:21,ar:"حَتَّى",tr:"ḥattā",en:"until / even / so that",cat:"Particles",freq:270},
+  {id:22,ar:"لَو",tr:"law",en:"if (hypothetical)",cat:"Particles",freq:214},
+  {id:23,ar:"كُل",tr:"kull",en:"all / every / each",cat:"Particles",freq:672},
+  {id:24,ar:"بَعْض",tr:"baʿḍ",en:"some / part",cat:"Particles",freq:165},
+  {id:25,ar:"قَد",tr:"qad",en:"already / indeed",cat:"Particles",freq:407},
+  {id:26,ar:"سَوْف",tr:"sawf",en:"will (future marker)",cat:"Particles",freq:103},
+  {id:27,ar:"لَن",tr:"lan",en:"will never (emphatic neg.)",cat:"Particles",freq:108},
+  {id:28,ar:"لَيْس",tr:"laysa",en:"is not / are not",cat:"Particles",freq:101},
+  {id:29,ar:"غَيْر",tr:"ghayr",en:"other than",cat:"Particles",freq:193},
+  {id:30,ar:"عِنْد",tr:"ʿinda",en:"with / at / near",cat:"Particles",freq:353},
+  {id:31,ar:"هَل",tr:"hal",en:"is / are (yes/no question)",cat:"Particles",freq:378},
+  {id:32,ar:"إِذ",tr:"idh",en:"when (past)",cat:"Particles",freq:259},
+  {id:33,ar:"لَعَل",tr:"laʿalla",en:"perhaps / so that",cat:"Particles",freq:130},
+  {id:34,ar:"إِلَّا",tr:"illā",en:"except / but",cat:"Particles",freq:663},
+  {id:35,ar:"فَ",tr:"fa",en:"so / then (sequence)",cat:"Particles",freq:10425},
+  {id:36,ar:"أَم",tr:"am",en:"or (disjunctive question)",cat:"Particles",freq:157},
+  {id:37,ar:"كَيْف",tr:"kayf",en:"how",cat:"Particles",freq:42},
+  {id:38,ar:"أَيْن",tr:"ayna",en:"where",cat:"Particles",freq:15},
+  {id:39,ar:"مِمَّا",tr:"mimmā",en:"from what / of what",cat:"Particles",freq:178},
+  {id:40,ar:"أَلَا",tr:"alā",en:"indeed! (attention getter)",cat:"Particles",freq:33},
+  {id:41,ar:"هُوَ",tr:"huwa",en:"he / it",cat:"Pronouns",freq:2667},
+  {id:42,ar:"هِيَ",tr:"hiya",en:"she / it",cat:"Pronouns",freq:140},
+  {id:43,ar:"هُم",tr:"hum",en:"they (masculine plural)",cat:"Pronouns",freq:2017},
+  {id:44,ar:"هُمَا",tr:"humā",en:"they two (dual)",cat:"Pronouns",freq:175},
+  {id:45,ar:"أَنتَ",tr:"anta",en:"you (masculine singular)",cat:"Pronouns",freq:292},
+  {id:46,ar:"أَنتُم",tr:"antum",en:"you (masculine plural)",cat:"Pronouns",freq:310},
+  {id:47,ar:"نَحْن",tr:"naḥnu",en:"we",cat:"Pronouns",freq:350},
+  {id:48,ar:"أَنا",tr:"anā",en:"I",cat:"Pronouns",freq:102},
+  {id:49,ar:"الَّذِينَ",tr:"alladhīna",en:"those who / the ones who",cat:"Pronouns",freq:1328},
+  {id:50,ar:"الَّذِي",tr:"alladhī",en:"the one who / which",cat:"Pronouns",freq:1226},
+  {id:51,ar:"الَّتِي",tr:"allatī",en:"which (feminine)",cat:"Pronouns",freq:240},
+  {id:52,ar:"مَا",tr:"mā",en:"what / that which / not",cat:"Pronouns",freq:5105},
+  {id:53,ar:"مَن",tr:"man",en:"who / whoever",cat:"Pronouns",freq:841},
+  {id:54,ar:"أَي",tr:"ayy",en:"which / what kind of",cat:"Pronouns",freq:75},
+  {id:55,ar:"اللَّه",tr:"Allāh",en:"Allah — God",cat:"Divine Names",freq:2699},
+  {id:56,ar:"رَب",tr:"Rabb",en:"Lord / Sustainer / Nurturer",cat:"Divine Names",freq:976},
+  {id:57,ar:"الرَّحْمَٰن",tr:"ar-Raḥmān",en:"The Most Compassionate",cat:"Divine Names",freq:57},
+  {id:58,ar:"الرَّحِيم",tr:"ar-Raḥīm",en:"The Most Merciful",cat:"Divine Names",freq:114},
+  {id:59,ar:"الْمَلِك",tr:"al-Malik",en:"The Sovereign King",cat:"Divine Names",freq:14},
+  {id:60,ar:"الْقُدُّوس",tr:"al-Quddūs",en:"The Most Holy",cat:"Divine Names",freq:2},
+  {id:61,ar:"السَّلَام",tr:"as-Salām",en:"The Source of Peace",cat:"Divine Names",freq:1},
+  {id:62,ar:"الْعَزِيز",tr:"al-ʿAzīz",en:"The Almighty",cat:"Divine Names",freq:91},
+  {id:63,ar:"الْجَبَّار",tr:"al-Jabbār",en:"The Compeller",cat:"Divine Names",freq:1},
+  {id:64,ar:"الْخَالِق",tr:"al-Khāliq",en:"The Creator",cat:"Divine Names",freq:8},
+  {id:65,ar:"الْغَفَّار",tr:"al-Ghaffār",en:"The Perpetual Forgiver",cat:"Divine Names",freq:5},
+  {id:66,ar:"الْقَهَّار",tr:"al-Qahhār",en:"The Subduer",cat:"Divine Names",freq:6},
+  {id:67,ar:"الْوَهَّاب",tr:"al-Wahhāb",en:"The Bestower",cat:"Divine Names",freq:3},
+  {id:68,ar:"الرَّزَّاق",tr:"ar-Razzāq",en:"The Provider",cat:"Divine Names",freq:1},
+  {id:69,ar:"الْعَلِيم",tr:"al-ʿAlīm",en:"The All-Knowing",cat:"Divine Names",freq:162},
+  {id:70,ar:"السَّمِيع",tr:"as-Samīʿ",en:"The All-Hearing",cat:"Divine Names",freq:46},
+  {id:71,ar:"الْبَصِير",tr:"al-Baṣīr",en:"The All-Seeing",cat:"Divine Names",freq:42},
+  {id:72,ar:"الْحَكِيم",tr:"al-Ḥakīm",en:"The All-Wise",cat:"Divine Names",freq:97},
+  {id:73,ar:"اللَّطِيف",tr:"al-Laṭīf",en:"The Subtle / The Kind",cat:"Divine Names",freq:7},
+  {id:74,ar:"الْخَبِير",tr:"al-Khabīr",en:"The All-Aware",cat:"Divine Names",freq:45},
+  {id:75,ar:"الْحَلِيم",tr:"al-Ḥalīm",en:"The Forbearing",cat:"Divine Names",freq:15},
+  {id:76,ar:"الْعَظِيم",tr:"al-ʿAẓīm",en:"The Magnificent",cat:"Divine Names",freq:109},
+  {id:77,ar:"الْغَفُور",tr:"al-Ghafūr",en:"The Oft-Forgiving",cat:"Divine Names",freq:91},
+  {id:78,ar:"الشَّكُور",tr:"ash-Shakūr",en:"The Appreciative",cat:"Divine Names",freq:4},
+  {id:79,ar:"الْعَلِي",tr:"al-ʿAlī",en:"The Most High",cat:"Divine Names",freq:23},
+  {id:80,ar:"الْكَبِير",tr:"al-Kabīr",en:"The Most Great",cat:"Divine Names",freq:9},
+  {id:81,ar:"الْحَفِيظ",tr:"al-Ḥafīẓ",en:"The Preserver",cat:"Divine Names",freq:5},
+  {id:82,ar:"الْكَرِيم",tr:"al-Karīm",en:"The Generous / Noble",cat:"Divine Names",freq:3},
+  {id:83,ar:"الرَّقِيب",tr:"ar-Raqīb",en:"The Watchful",cat:"Divine Names",freq:3},
+  {id:84,ar:"الْوَاسِع",tr:"al-Wāsiʿ",en:"The All-Encompassing",cat:"Divine Names",freq:9},
+  {id:85,ar:"الْوَدُود",tr:"al-Wadūd",en:"The Loving",cat:"Divine Names",freq:2},
+  {id:86,ar:"الشَّهِيد",tr:"ash-Shahīd",en:"The Witness",cat:"Divine Names",freq:18},
+  {id:87,ar:"الْحَق",tr:"al-Ḥaqq",en:"The Truth / Reality",cat:"Divine Names",freq:287},
+  {id:88,ar:"الْوَكِيل",tr:"al-Wakīl",en:"The Trustee / Disposer",cat:"Divine Names",freq:14},
+  {id:89,ar:"الْقَوِي",tr:"al-Qawī",en:"The All-Strong",cat:"Divine Names",freq:9},
+  {id:90,ar:"الْوَلِي",tr:"al-Walī",en:"The Guardian Friend",cat:"Divine Names",freq:39},
+  {id:91,ar:"الْحَمِيد",tr:"al-Ḥamīd",en:"The Praiseworthy",cat:"Divine Names",freq:17},
+  {id:92,ar:"الْحَي",tr:"al-Ḥayy",en:"The Ever-Living",cat:"Divine Names",freq:5},
+  {id:93,ar:"الْقَيُّوم",tr:"al-Qayyūm",en:"The Self-Subsisting Sustainer",cat:"Divine Names",freq:3},
+  {id:94,ar:"الْوَاحِد",tr:"al-Wāḥid",en:"The One / Unique",cat:"Divine Names",freq:22},
+  {id:95,ar:"الصَّمَد",tr:"aṣ-Ṣamad",en:"The Eternal Refuge",cat:"Divine Names",freq:1},
+  {id:96,ar:"الْأَوَّل",tr:"al-Awwal",en:"The First",cat:"Divine Names",freq:3},
+  {id:97,ar:"الْآخِر",tr:"al-Ākhir",en:"The Last",cat:"Divine Names",freq:4},
+  {id:98,ar:"الظَّاهِر",tr:"aẓ-Ẓāhir",en:"The Manifest",cat:"Divine Names",freq:1},
+  {id:99,ar:"الْبَاطِن",tr:"al-Bāṭin",en:"The Hidden",cat:"Divine Names",freq:1},
+  {id:100,ar:"التَّوَّاب",tr:"at-Tawwāb",en:"The Accepter of Repentance",cat:"Divine Names",freq:11},
+  {id:101,ar:"الْعَفُو",tr:"al-ʿAfū",en:"The Pardoner",cat:"Divine Names",freq:5},
+  {id:102,ar:"الرَّؤُوف",tr:"ar-Raʾūf",en:"The Compassionate",cat:"Divine Names",freq:10},
+  {id:103,ar:"الْغَنِي",tr:"al-Ghanī",en:"The Self-Sufficient",cat:"Divine Names",freq:18},
+  {id:104,ar:"الْهَادِي",tr:"al-Hādī",en:"The Guide",cat:"Divine Names",freq:2},
+  {id:105,ar:"الْبَدِيع",tr:"al-Badīʿ",en:"The Incomparable Originator",cat:"Divine Names",freq:2},
+  {id:106,ar:"قَالَ",tr:"qāla",en:"he said / spoke",cat:"Verbs",freq:1721},
+  {id:107,ar:"كَانَ",tr:"kāna",en:"he was / existed",cat:"Verbs",freq:1358},
+  {id:108,ar:"آمَنَ",tr:"āmana",en:"he believed",cat:"Verbs",freq:537},
+  {id:109,ar:"عَمِلَ",tr:"ʿamila",en:"he did / worked",cat:"Verbs",freq:332},
+  {id:110,ar:"عَلِمَ",tr:"ʿalima",en:"he knew",cat:"Verbs",freq:382},
+  {id:111,ar:"جَاءَ",tr:"jāʾa",en:"he came",cat:"Verbs",freq:278},
+  {id:112,ar:"أَرَادَ",tr:"arāda",en:"he wanted / willed",cat:"Verbs",freq:138},
+  {id:113,ar:"رَأَى",tr:"raʾā",en:"he saw / perceived",cat:"Verbs",freq:146},
+  {id:114,ar:"أَخَذَ",tr:"akhadha",en:"he took / seized",cat:"Verbs",freq:136},
+  {id:115,ar:"ظَلَمَ",tr:"ẓalama",en:"he wronged / oppressed",cat:"Verbs",freq:316},
+  {id:116,ar:"كَفَرَ",tr:"kafara",en:"he disbelieved / rejected",cat:"Verbs",freq:482},
+  {id:117,ar:"أَرْسَلَ",tr:"arsala",en:"he sent",cat:"Verbs",freq:242},
+  {id:118,ar:"هَدَى",tr:"hadā",en:"he guided",cat:"Verbs",freq:316},
+  {id:119,ar:"خَلَقَ",tr:"khalaqa",en:"he created",cat:"Verbs",freq:254},
+  {id:120,ar:"دَخَلَ",tr:"dakhala",en:"he entered",cat:"Verbs",freq:126},
+  {id:121,ar:"خَرَجَ",tr:"kharaja",en:"he went out / exited",cat:"Verbs",freq:60},
+  {id:122,ar:"ذَكَرَ",tr:"dhakara",en:"he remembered / mentioned",cat:"Verbs",freq:292},
+  {id:123,ar:"صَبَرَ",tr:"ṣabara",en:"he was patient",cat:"Verbs",freq:103},
+  {id:124,ar:"شَكَرَ",tr:"shakara",en:"he was grateful",cat:"Verbs",freq:75},
+  {id:125,ar:"كَذَّبَ",tr:"kadhdhaba",en:"he denied as false",cat:"Verbs",freq:281},
+  {id:126,ar:"أَمَرَ",tr:"amara",en:"he commanded",cat:"Verbs",freq:169},
+  {id:127,ar:"نَهَى",tr:"nahā",en:"he forbade",cat:"Verbs",freq:52},
+  {id:128,ar:"قَتَلَ",tr:"qatala",en:"he killed",cat:"Verbs",freq:170},
+  {id:129,ar:"نَزَّلَ",tr:"nazzala",en:"he sent down / revealed",cat:"Verbs",freq:292},
+  {id:130,ar:"وَجَدَ",tr:"wajada",en:"he found",cat:"Verbs",freq:107},
+  {id:131,ar:"تَابَ",tr:"tāba",en:"he repented",cat:"Verbs",freq:87},
+  {id:132,ar:"غَفَرَ",tr:"ghafara",en:"he forgave",cat:"Verbs",freq:234},
+  {id:133,ar:"شَاءَ",tr:"shāʾa",en:"he willed / wished",cat:"Verbs",freq:214},
+  {id:134,ar:"خَافَ",tr:"khāfa",en:"he feared",cat:"Verbs",freq:129},
+  {id:135,ar:"رَجَعَ",tr:"rajaʿa",en:"he returned",cat:"Verbs",freq:130},
+  {id:136,ar:"نَظَرَ",tr:"naẓara",en:"he looked / reflected",cat:"Verbs",freq:127},
+  {id:137,ar:"سَمِعَ",tr:"samiʿa",en:"he heard",cat:"Verbs",freq:175},
+  {id:138,ar:"جَعَلَ",tr:"jaʿala",en:"he made / appointed",cat:"Verbs",freq:344},
+  {id:139,ar:"دَعَا",tr:"daʿā",en:"he called / prayed",cat:"Verbs",freq:215},
+  {id:140,ar:"عَبَدَ",tr:"ʿabada",en:"he worshipped",cat:"Verbs",freq:275},
+  {id:141,ar:"اتَّقَى",tr:"ittaqā",en:"he feared God / was pious",cat:"Verbs",freq:258},
+  {id:142,ar:"أَسْلَمَ",tr:"aslama",en:"he submitted to God",cat:"Verbs",freq:72},
+  {id:143,ar:"صَلَّى",tr:"ṣallā",en:"he prayed / blessed",cat:"Verbs",freq:17},
+  {id:144,ar:"صَامَ",tr:"ṣāma",en:"he fasted",cat:"Verbs",freq:8},
+  {id:145,ar:"نَصَرَ",tr:"naṣara",en:"he helped / gave victory",cat:"Verbs",freq:159},
+  {id:146,ar:"قَضَى",tr:"qaḍā",en:"he decreed / judged",cat:"Verbs",freq:88},
+  {id:147,ar:"وَهَبَ",tr:"wahaba",en:"he gave / bestowed",cat:"Verbs",freq:25},
+  {id:148,ar:"حَمِدَ",tr:"ḥamida",en:"he praised",cat:"Verbs",freq:68},
+  {id:149,ar:"سَبَّحَ",tr:"sabbaḥa",en:"he glorified",cat:"Verbs",freq:92},
+  {id:150,ar:"اسْتَغْفَرَ",tr:"istaghfara",en:"he sought forgiveness",cat:"Verbs",freq:38},
+  {id:151,ar:"فَعَلَ",tr:"faʿala",en:"he did / performed",cat:"Verbs",freq:108},
+  {id:152,ar:"سَأَلَ",tr:"saʾala",en:"he asked / questioned",cat:"Verbs",freq:129},
+  {id:153,ar:"حَكَمَ",tr:"ḥakama",en:"he judged / ruled",cat:"Verbs",freq:210},
+  {id:154,ar:"شَهِدَ",tr:"shahida",en:"he witnessed / testified",cat:"Verbs",freq:55},
+  {id:155,ar:"ظَنَّ",tr:"ẓanna",en:"he thought / supposed",cat:"Verbs",freq:68},
+  {id:156,ar:"رَزَقَ",tr:"razaqa",en:"he provided sustenance",cat:"Verbs",freq:61},
+  {id:157,ar:"كَسَبَ",tr:"kasaba",en:"he earned / acquired",cat:"Verbs",freq:67},
+  {id:158,ar:"أَتَى",tr:"atā",en:"he came / brought",cat:"Verbs",freq:159},
+  {id:159,ar:"بَلَغَ",tr:"balagha",en:"he reached / conveyed",cat:"Verbs",freq:65},
+  {id:160,ar:"أَنزَلَ",tr:"anzala",en:"he revealed / sent down",cat:"Verbs",freq:292},
+  {id:161,ar:"يَوْم",tr:"yawm",en:"day",cat:"Nouns",freq:406},
+  {id:162,ar:"نَاس",tr:"nās",en:"people / mankind",cat:"Nouns",freq:241},
+  {id:163,ar:"كِتَاب",tr:"kitāb",en:"book / scripture",cat:"Nouns",freq:319},
+  {id:164,ar:"آيَة",tr:"āya",en:"sign / verse / miracle",cat:"Nouns",freq:382},
+  {id:165,ar:"أَرْض",tr:"arḍ",en:"earth / land",cat:"Nouns",freq:461},
+  {id:166,ar:"سَمَاء",tr:"samāʾ",en:"sky / heaven",cat:"Nouns",freq:310},
+  {id:167,ar:"نَفْس",tr:"nafs",en:"soul / self",cat:"Nouns",freq:295},
+  {id:168,ar:"قَلْب",tr:"qalb",en:"heart",cat:"Nouns",freq:132},
+  {id:169,ar:"نُور",tr:"nūr",en:"light",cat:"Nouns",freq:49},
+  {id:170,ar:"ظُلُمَات",tr:"ẓulumāt",en:"darknesses",cat:"Nouns",freq:23},
+  {id:171,ar:"عَذَاب",tr:"ʿadhāb",en:"punishment / torment",cat:"Nouns",freq:322},
+  {id:172,ar:"رَحْمَة",tr:"raḥma",en:"mercy / compassion",cat:"Nouns",freq:114},
+  {id:173,ar:"نِعْمَة",tr:"niʿma",en:"blessing / favor",cat:"Nouns",freq:65},
+  {id:174,ar:"فِتْنَة",tr:"fitna",en:"trial / temptation / discord",cat:"Nouns",freq:60},
+  {id:175,ar:"جَنَّة",tr:"janna",en:"paradise / garden",cat:"Nouns",freq:147},
+  {id:176,ar:"نَار",tr:"nār",en:"fire / hellfire",cat:"Nouns",freq:145},
+  {id:177,ar:"صَلَاة",tr:"ṣalāh",en:"prayer",cat:"Nouns",freq:83},
+  {id:178,ar:"زَكَاة",tr:"zakāh",en:"purifying alms",cat:"Nouns",freq:32},
+  {id:179,ar:"إِيمَان",tr:"īmān",en:"faith / belief",cat:"Nouns",freq:45},
+  {id:180,ar:"إِسْلَام",tr:"islām",en:"submission to God",cat:"Nouns",freq:8},
+  {id:181,ar:"تَقْوَى",tr:"taqwā",en:"God-consciousness / piety",cat:"Nouns",freq:87},
+  {id:182,ar:"صِرَاط",tr:"ṣirāṭ",en:"path / way / road",cat:"Nouns",freq:45},
+  {id:183,ar:"سَبِيل",tr:"sabīl",en:"way / path / means",cat:"Nouns",freq:166},
+  {id:184,ar:"أَمر",tr:"amr",en:"command / affair / matter",cat:"Nouns",freq:169},
+  {id:185,ar:"قَوْل",tr:"qawl",en:"speech / saying",cat:"Nouns",freq:162},
+  {id:186,ar:"قَوْم",tr:"qawm",en:"people / nation / tribe",cat:"Nouns",freq:383},
+  {id:187,ar:"أُمَّة",tr:"umma",en:"community / nation",cat:"Nouns",freq:52},
+  {id:188,ar:"بَيْت",tr:"bayt",en:"house / home",cat:"Nouns",freq:73},
+  {id:189,ar:"مَسْجِد",tr:"masjid",en:"mosque",cat:"Nouns",freq:28},
+  {id:190,ar:"مَال",tr:"māl",en:"wealth / property",cat:"Nouns",freq:86},
+  {id:191,ar:"حَيَاة",tr:"ḥayāh",en:"life",cat:"Nouns",freq:76},
+  {id:192,ar:"مَوْت",tr:"mawt",en:"death",cat:"Nouns",freq:164},
+  {id:193,ar:"رُوح",tr:"rūḥ",en:"spirit / soul",cat:"Nouns",freq:21},
+  {id:194,ar:"مَلَك",tr:"malak",en:"angel",cat:"Nouns",freq:88},
+  {id:195,ar:"شَيْطَان",tr:"shayṭān",en:"devil / Satan",cat:"Nouns",freq:88},
+  {id:196,ar:"حَق",tr:"ḥaqq",en:"truth / right / justice",cat:"Nouns",freq:287},
+  {id:197,ar:"بَاطِل",tr:"bāṭil",en:"falsehood / vanity",cat:"Nouns",freq:35},
+  {id:198,ar:"خَيْر",tr:"khayr",en:"good / goodness",cat:"Nouns",freq:185},
+  {id:199,ar:"شَر",tr:"sharr",en:"evil / harm",cat:"Nouns",freq:30},
+  {id:200,ar:"حِكْمَة",tr:"ḥikma",en:"wisdom",cat:"Nouns",freq:20},
+  {id:201,ar:"عِلْم",tr:"ʿilm",en:"knowledge",cat:"Nouns",freq:105},
+  {id:202,ar:"فَضْل",tr:"faḍl",en:"grace / bounty",cat:"Nouns",freq:106},
+  {id:203,ar:"عَدْل",tr:"ʿadl",en:"justice / fairness",cat:"Nouns",freq:13},
+  {id:204,ar:"مَغْفِرَة",tr:"maghfira",en:"forgiveness",cat:"Nouns",freq:38},
+  {id:205,ar:"هُدَى",tr:"hudā",en:"guidance",cat:"Nouns",freq:92},
+  {id:206,ar:"ضَلَال",tr:"ḍalāl",en:"misguidance",cat:"Nouns",freq:68},
+  {id:207,ar:"ذِكْر",tr:"dhikr",en:"remembrance / mention",cat:"Nouns",freq:292},
+  {id:208,ar:"شُكْر",tr:"shukr",en:"gratitude",cat:"Nouns",freq:75},
+  {id:209,ar:"صَبْر",tr:"ṣabr",en:"patience / endurance",cat:"Nouns",freq:90},
+  {id:210,ar:"خَوْف",tr:"khawf",en:"fear",cat:"Nouns",freq:44},
+  {id:211,ar:"حُب",tr:"ḥubb",en:"love / affection",cat:"Nouns",freq:83},
+  {id:212,ar:"كُفْر",tr:"kufr",en:"disbelief / ingratitude",cat:"Nouns",freq:37},
+  {id:213,ar:"ظُلْم",tr:"ẓulm",en:"wrongdoing / oppression",cat:"Nouns",freq:166},
+  {id:214,ar:"عَهْد",tr:"ʿahd",en:"covenant / promise",cat:"Nouns",freq:56},
+  {id:215,ar:"نَبِي",tr:"nabī",en:"prophet",cat:"People",freq:75},
+  {id:216,ar:"رَسُول",tr:"rasūl",en:"messenger / apostle",cat:"People",freq:332},
+  {id:217,ar:"مُؤْمِن",tr:"muʾmin",en:"believer",cat:"People",freq:95},
+  {id:218,ar:"كَافِر",tr:"kāfir",en:"disbeliever",cat:"People",freq:154},
+  {id:219,ar:"مُنَافِق",tr:"munāfiq",en:"hypocrite",cat:"People",freq:37},
+  {id:220,ar:"مُشْرِك",tr:"mushrik",en:"one who associates partners with God",cat:"People",freq:55},
+  {id:221,ar:"ظَالِم",tr:"ẓālim",en:"wrongdoer / oppressor",cat:"People",freq:112},
+  {id:222,ar:"صَالِح",tr:"ṣāliḥ",en:"righteous",cat:"People",freq:87},
+  {id:223,ar:"عِبَاد",tr:"ʿibād",en:"servants / worshippers",cat:"People",freq:125},
+  {id:224,ar:"أَهْل",tr:"ahl",en:"people / family",cat:"People",freq:257},
+  {id:225,ar:"وَلَد",tr:"walad",en:"child / offspring",cat:"People",freq:100},
+  {id:226,ar:"أَب",tr:"ab",en:"father",cat:"People",freq:117},
+  {id:227,ar:"أُم",tr:"umm",en:"mother",cat:"People",freq:36},
+  {id:228,ar:"أَخ",tr:"akh",en:"brother",cat:"People",freq:97},
+  {id:229,ar:"زَوْج",tr:"zawj",en:"spouse / partner / pair",cat:"People",freq:81},
+  {id:230,ar:"إِنسَان",tr:"insān",en:"human being",cat:"People",freq:65},
+  {id:231,ar:"رَجُل",tr:"rajul",en:"man",cat:"People",freq:55},
+  {id:232,ar:"مَرْأَة",tr:"marʾa",en:"woman",cat:"People",freq:26},
+  {id:233,ar:"إِبْرَاهِيم",tr:"Ibrāhīm",en:"Ibrahim (Abraham)",cat:"People",freq:69},
+  {id:234,ar:"مُوسَى",tr:"Mūsā",en:"Musa (Moses)",cat:"People",freq:136},
+  {id:235,ar:"عِيسَى",tr:"ʿĪsā",en:"Isa (Jesus)",cat:"People",freq:25},
+  {id:236,ar:"مُحَمَّد",tr:"Muḥammad",en:"Muhammad ﷺ",cat:"People",freq:4},
+  {id:237,ar:"آدَم",tr:"Ādam",en:"Adam",cat:"People",freq:25},
+  {id:238,ar:"نُوح",tr:"Nūḥ",en:"Nuh (Noah)",cat:"People",freq:43},
+  {id:239,ar:"يُوسُف",tr:"Yūsuf",en:"Yusuf (Joseph)",cat:"People",freq:27},
+  {id:240,ar:"مَرْيَم",tr:"Maryam",en:"Maryam (Mary)",cat:"People",freq:34},
+  {id:241,ar:"فِرْعَون",tr:"Firʿawn",en:"Pharaoh",cat:"People",freq:74},
+  {id:242,ar:"إِبْلِيس",tr:"Iblīs",en:"Iblis (the Devil)",cat:"People",freq:11},
+  {id:243,ar:"وَقْت",tr:"waqt",en:"time / moment",cat:"Time",freq:16},
+  {id:244,ar:"سَاعَة",tr:"sāʿa",en:"hour / the Hour (Judgment Day)",cat:"Time",freq:48},
+  {id:245,ar:"لَيْل",tr:"layl",en:"night",cat:"Time",freq:92},
+  {id:246,ar:"نَهَار",tr:"nahār",en:"day / daytime",cat:"Time",freq:57},
+  {id:247,ar:"فَجْر",tr:"fajr",en:"dawn / daybreak",cat:"Time",freq:5},
+  {id:248,ar:"عَصْر",tr:"ʿaṣr",en:"afternoon / era",cat:"Time",freq:5},
+  {id:249,ar:"أَبَد",tr:"abad",en:"eternity / forever",cat:"Time",freq:28},
+  {id:250,ar:"دُنْيَا",tr:"dunyā",en:"this world / present life",cat:"Time",freq:115},
+  {id:251,ar:"آخِرَة",tr:"ākhira",en:"the Hereafter",cat:"Time",freq:115},
+  {id:252,ar:"سَنَة",tr:"sana",en:"year",cat:"Time",freq:19},
+  {id:253,ar:"مَكَان",tr:"makān",en:"place / location",cat:"Time",freq:51},
+  {id:254,ar:"مَدِينَة",tr:"madīna",en:"city",cat:"Time",freq:14},
+  {id:255,ar:"قَرْيَة",tr:"qarya",en:"village / town",cat:"Time",freq:56},
+  {id:256,ar:"مَاء",tr:"māʾ",en:"water",cat:"Nature",freq:63},
+  {id:257,ar:"شَمْس",tr:"shams",en:"sun",cat:"Nature",freq:33},
+  {id:258,ar:"قَمَر",tr:"qamar",en:"moon",cat:"Nature",freq:27},
+  {id:259,ar:"نَجْم",tr:"najm",en:"star",cat:"Nature",freq:13},
+  {id:260,ar:"شَجَر",tr:"shajar",en:"tree",cat:"Nature",freq:26},
+  {id:261,ar:"بَحْر",tr:"baḥr",en:"sea / ocean",cat:"Nature",freq:41},
+  {id:262,ar:"نَهْر",tr:"nahr",en:"river",cat:"Nature",freq:54},
+  {id:263,ar:"جَبَل",tr:"jabal",en:"mountain",cat:"Nature",freq:39},
+  {id:264,ar:"رِيح",tr:"rīḥ",en:"wind",cat:"Nature",freq:29},
+  {id:265,ar:"مَطَر",tr:"maṭar",en:"rain",cat:"Nature",freq:10},
+  {id:266,ar:"تُرَاب",tr:"turāb",en:"dust / soil / earth",cat:"Nature",freq:22},
+  {id:267,ar:"ثَمَر",tr:"thamar",en:"fruit / produce",cat:"Nature",freq:24},
+  {id:268,ar:"طَيْر",tr:"ṭayr",en:"birds",cat:"Nature",freq:22},
+  {id:269,ar:"قِيَامَة",tr:"qiyāma",en:"resurrection / Day of Rising",cat:"Eschatology",freq:70},
+  {id:270,ar:"جَهَنَّم",tr:"jahannam",en:"hellfire",cat:"Eschatology",freq:77},
+  {id:271,ar:"شَفَاعَة",tr:"shafāʿa",en:"intercession",cat:"Eschatology",freq:30},
+  {id:272,ar:"بَعْث",tr:"baʿth",en:"resurrection / raising",cat:"Eschatology",freq:67},
+  {id:273,ar:"حِسَاب",tr:"ḥisāb",en:"reckoning / accounting",cat:"Eschatology",freq:37},
+  {id:274,ar:"مِيزَان",tr:"mīzān",en:"scale / balance",cat:"Eschatology",freq:23},
+  {id:275,ar:"أَعْمَال",tr:"aʿmāl",en:"deeds / acts / works",cat:"Eschatology",freq:72},
+  {id:276,ar:"جَزَاء",tr:"jazāʾ",en:"recompense / reward",cat:"Eschatology",freq:42},
+  {id:277,ar:"ثَوَاب",tr:"thawāb",en:"reward (for good deeds)",cat:"Eschatology",freq:13},
+  {id:278,ar:"بَرْزَخ",tr:"barzakh",en:"barrier between death and resurrection",cat:"Eschatology",freq:3},
+  {id:279,ar:"عِبَادَة",tr:"ʿibāda",en:"worship / servitude",cat:"Worship",freq:8},
+  {id:280,ar:"دُعَاء",tr:"duʿāʾ",en:"supplication / prayer",cat:"Worship",freq:27},
+  {id:281,ar:"تَوْبَة",tr:"tawba",en:"repentance",cat:"Worship",freq:24},
+  {id:282,ar:"صَوْم",tr:"ṣawm",en:"fasting",cat:"Worship",freq:9},
+  {id:283,ar:"حَج",tr:"ḥajj",en:"major pilgrimage",cat:"Worship",freq:10},
+  {id:284,ar:"جِهَاد",tr:"jihād",en:"striving in God's cause",cat:"Worship",freq:4},
+  {id:285,ar:"تَسْبِيح",tr:"tasbīḥ",en:"glorification of God",cat:"Worship",freq:12},
+  {id:286,ar:"سُجُود",tr:"sujūd",en:"prostration",cat:"Worship",freq:22},
+  {id:287,ar:"حَلَال",tr:"ḥalāl",en:"permissible / lawful",cat:"Worship",freq:14},
+  {id:288,ar:"حَرَام",tr:"ḥarām",en:"forbidden / unlawful",cat:"Worship",freq:83},
+  {id:289,ar:"صَدَقَة",tr:"ṣadaqa",en:"voluntary charity",cat:"Worship",freq:13},
+  {id:290,ar:"رَمَضَان",tr:"Ramaḍān",en:"Ramadan (month of fasting)",cat:"Worship",freq:1},
+  {id:291,ar:"كَبِير",tr:"kabīr",en:"great / large / old",cat:"Adjectives",freq:166},
+  {id:292,ar:"صَغِير",tr:"ṣaghīr",en:"small / young",cat:"Adjectives",freq:10},
+  {id:293,ar:"كَثِير",tr:"kathīr",en:"many / much",cat:"Adjectives",freq:165},
+  {id:294,ar:"قَلِيل",tr:"qalīl",en:"few / little",cat:"Adjectives",freq:53},
+  {id:295,ar:"عَظِيم",tr:"ʿaẓīm",en:"great / mighty",cat:"Adjectives",freq:109},
+  {id:296,ar:"قَرِيب",tr:"qarīb",en:"near / close",cat:"Adjectives",freq:33},
+  {id:297,ar:"بَعِيد",tr:"baʿīd",en:"far / distant",cat:"Adjectives",freq:20},
+  {id:298,ar:"طَيِّب",tr:"ṭayyib",en:"good / pure / pleasant",cat:"Adjectives",freq:45},
+  {id:299,ar:"مُسْتَقِيم",tr:"mustaqīm",en:"straight / upright",cat:"Adjectives",freq:33},
+  {id:300,ar:"كَرِيم",tr:"karīm",en:"generous / noble",cat:"Adjectives",freq:27},
+  {id:301,ar:"أَمِين",tr:"amīn",en:"trustworthy / faithful",cat:"Adjectives",freq:8},
+  {id:302,ar:"مُبَارَك",tr:"mubārak",en:"blessed",cat:"Adjectives",freq:5},
+  {id:303,ar:"مُخْلِص",tr:"mukhliṣ",en:"sincere / devoted",cat:"Adjectives",freq:11},
+  {id:304,ar:"مُتَّقِي",tr:"muttaqī",en:"God-fearing / pious",cat:"Adjectives",freq:14},
+  {id:305,ar:"شَاكِر",tr:"shākir",en:"grateful / thankful",cat:"Adjectives",freq:10},
+  {id:306,ar:"صَابِر",tr:"ṣābir",en:"patient / enduring",cat:"Adjectives",freq:14},
+  {id:307,ar:"مُحْسِن",tr:"muḥsin",en:"doer of good",cat:"Adjectives",freq:20},
+  {id:308,ar:"فَاسِق",tr:"fāsiq",en:"transgressor / sinner",cat:"Adjectives",freq:26},
+  {id:309,ar:"أَعْمَى",tr:"aʿmā",en:"blind (physically or spiritually)",cat:"Adjectives",freq:24},
+  {id:310,ar:"صَادِق",tr:"ṣādiq",en:"truthful / honest",cat:"Adjectives",freq:26},
+  {id:311,ar:"عَيْن",tr:"ʿayn",en:"eye",cat:"Body",freq:46},
+  {id:312,ar:"أُذُن",tr:"udhun",en:"ear",cat:"Body",freq:18},
+  {id:313,ar:"لِسَان",tr:"lisān",en:"tongue / language",cat:"Body",freq:25},
+  {id:314,ar:"يَد",tr:"yad",en:"hand / arm",cat:"Body",freq:120},
+  {id:315,ar:"وَجْه",tr:"wajh",en:"face",cat:"Body",freq:72},
+  {id:316,ar:"رَأْس",tr:"raʾs",en:"head",cat:"Body",freq:14},
+  {id:317,ar:"صَدْر",tr:"ṣadr",en:"chest / breast",cat:"Body",freq:44},
+  {id:318,ar:"بَطْن",tr:"baṭn",en:"belly / inside",cat:"Body",freq:13},
+  {id:319,ar:"رِجْل",tr:"rijl",en:"foot / leg",cat:"Body",freq:22},
+  {id:320,ar:"دَم",tr:"dam",en:"blood",cat:"Body",freq:7},
+  {id:321,ar:"مَرَض",tr:"maraḍ",en:"illness / disease",cat:"Body",freq:15},
+  {id:322,ar:"شِفَاء",tr:"shifāʾ",en:"healing / cure",cat:"Body",freq:4},
+  {id:323,ar:"ظَهْر",tr:"ẓahr",en:"back",cat:"Body",freq:25},
+];
+
+const PHRASES = [
+  {id:1,ar:"بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",tr:"Bismillāhi r-raḥmāni r-raḥīm",en:"In the name of Allah, the Most Compassionate, the Most Merciful",ctx:"Opens every surah; said before any righteous action",cat:"Al-Fatiha",diff:"b"},
+  {id:2,ar:"الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",tr:"Al-ḥamdu lillāhi rabbi l-ʿālamīn",en:"All praise belongs to Allah, Lord of all the worlds",ctx:"Al-Fatiha 1:2 — recited in every unit of prayer",cat:"Al-Fatiha",diff:"b"},
+  {id:3,ar:"إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",tr:"Iyyāka naʿbudu wa-iyyāka nastaʿīn",en:"You alone we worship, and You alone we ask for help",ctx:"Al-Fatiha 1:5 — the heart of the human-God relationship",cat:"Al-Fatiha",diff:"b"},
+  {id:4,ar:"اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ",tr:"Ihdinā ṣ-ṣirāṭa l-mustaqīm",en:"Guide us to the straight path",ctx:"Al-Fatiha 1:6 — most repeated dua, said 17 times daily",cat:"Al-Fatiha",diff:"b"},
+  {id:5,ar:"مَالِكِ يَوْمِ الدِّينِ",tr:"Māliki yawmi d-dīn",en:"Master of the Day of Judgment",ctx:"Al-Fatiha 1:4",cat:"Al-Fatiha",diff:"b"},
+  {id:6,ar:"اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ",tr:"Allāhu lā ilāha illā huwa l-ḥayyu l-qayyūm",en:"Allah — there is no deity except Him, the Ever-Living, the Sustainer of existence",ctx:"Ayat al-Kursi 2:255 — the greatest verse in the Quran",cat:"Ayat al-Kursi",diff:"i"},
+  {id:7,ar:"لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ",tr:"Lā taʾkhudhuhū sinatun wa-lā nawm",en:"Neither drowsiness overtakes Him nor sleep",ctx:"Ayat al-Kursi 2:255",cat:"Ayat al-Kursi",diff:"i"},
+  {id:8,ar:"لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ",tr:"Lahū mā fī s-samāwāti wa-mā fī l-arḍ",en:"To Him belongs whatever is in the heavens and on earth",ctx:"Ayat al-Kursi 2:255",cat:"Ayat al-Kursi",diff:"i"},
+  {id:9,ar:"وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ",tr:"Wasiʿa kursiyyuhu s-samāwāti wa-l-arḍ",en:"His Throne extends over the heavens and the earth",ctx:"Ayat al-Kursi 2:255",cat:"Ayat al-Kursi",diff:"a"},
+  {id:10,ar:"لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا",tr:"Lā yukallifu Allāhu nafsan illā wusʿahā",en:"Allah does not burden a soul beyond that it can bear",ctx:"Al-Baqarah 2:286 — one of the most comforting verses",cat:"Key Verses",diff:"i"},
+  {id:11,ar:"إِنَّ مَعَ الْعُسْرِ يُسْرًا",tr:"Inna maʿa l-ʿusri yusrā",en:"Indeed, with hardship will be ease",ctx:"Ash-Sharh 94:6 — repeated twice for emphasis",cat:"Key Verses",diff:"b"},
+  {id:12,ar:"فَبِأَيِّ آلَاءِ رَبِّكُمَا تُكَذِّبَانِ",tr:"Fa-bi-ayyi ālāʾi rabbikumā tukadhdhibān",en:"So which of the favors of your Lord would you deny?",ctx:"Ar-Rahman 55 — repeated 31 times throughout the surah",cat:"Key Verses",diff:"i"},
+  {id:13,ar:"قُلْ هُوَ اللَّهُ أَحَدٌ",tr:"Qul huwa Allāhu aḥad",en:"Say: He is Allah, the One",ctx:"Al-Ikhlas 112:1 — worth one-third of the Quran in reward",cat:"Short Surahs",diff:"b"},
+  {id:14,ar:"اللَّهُ الصَّمَدُ",tr:"Allāhu ṣ-ṣamad",en:"Allah, the Eternal Refuge",ctx:"Al-Ikhlas 112:2",cat:"Short Surahs",diff:"b"},
+  {id:15,ar:"لَمْ يَلِدْ وَلَمْ يُولَدْ",tr:"Lam yalid wa-lam yūlad",en:"He neither begets nor is born",ctx:"Al-Ikhlas 112:3",cat:"Short Surahs",diff:"b"},
+  {id:16,ar:"وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ",tr:"Wa-lam yakun lahū kufuwan aḥad",en:"Nor is there to Him any equivalent",ctx:"Al-Ikhlas 112:4",cat:"Short Surahs",diff:"i"},
+  {id:17,ar:"قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ",tr:"Qul aʿūdhu bi-rabbi l-falaq",en:"Say: I seek refuge with the Lord of the daybreak",ctx:"Al-Falaq 113:1",cat:"Short Surahs",diff:"b"},
+  {id:18,ar:"قُلْ أَعُوذُ بِرَبِّ النَّاسِ",tr:"Qul aʿūdhu bi-rabbi n-nās",en:"Say: I seek refuge with the Lord of mankind",ctx:"An-Nas 114:1",cat:"Short Surahs",diff:"b"},
+  {id:19,ar:"إِنَّا لِلَّهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ",tr:"Innā lillāhi wa-innā ilayhi rājiʿūn",en:"Indeed, to Allah we belong and to Him we shall return",ctx:"Al-Baqarah 2:156 — said upon hearing of calamity or death",cat:"Daily Expressions",diff:"b"},
+  {id:20,ar:"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",tr:"Subḥāna Allāhi wa-biḥamdih",en:"Glory be to Allah and praise be to Him",ctx:"Plants a tree in paradise — most beloved phrase of dhikr",cat:"Daily Expressions",diff:"b"},
+  {id:21,ar:"لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",tr:"Lā ḥawla wa-lā quwwata illā billāh",en:"There is no power nor strength except with Allah",ctx:"A treasure from the treasures of paradise",cat:"Daily Expressions",diff:"i"},
+  {id:22,ar:"حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ",tr:"Ḥasbunā Allāhu wa-niʿma l-wakīl",en:"Sufficient for us is Allah, and He is the best Disposer of affairs",ctx:"Al-Imran 3:173 — said by Ibrahim when thrown into fire",cat:"Daily Expressions",diff:"i"},
+  {id:23,ar:"أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ",tr:"Alā bi-dhikri Allāhi taṭmaʾinnu l-qulūb",en:"Verily, in the remembrance of Allah do hearts find rest",ctx:"Ar-Rad 13:28 — the most famous verse on peace through dhikr",cat:"Key Verses",diff:"b"},
+  {id:24,ar:"رَبِّ زِدْنِي عِلْمًا",tr:"Rabbi zidnī ʿilmā",en:"My Lord, increase me in knowledge",ctx:"Ta-Ha 20:114 — the shortest dua in the Quran",cat:"Supplications",diff:"b"},
+  {id:25,ar:"رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً",tr:"Rabbanā ātinā fi d-dunyā ḥasanatan wa-fi l-ākhirati ḥasanatan",en:"Our Lord, give us good in this world and good in the Hereafter",ctx:"Al-Baqarah 2:201 — beloved dua for both worlds",cat:"Supplications",diff:"i"},
+  {id:26,ar:"رَبِّ اشْرَحْ لِي صَدْرِي",tr:"Rabbi shraḥ lī ṣadrī",en:"My Lord, expand for me my chest (ease my task)",ctx:"Ta-Ha 20:25 — dua of Musa before Pharaoh",cat:"Supplications",diff:"i"},
+  {id:27,ar:"لَا إِلَٰهَ إِلَّا أَنتَ سُبْحَانَكَ إِنِّي كُنتُ مِنَ الظَّالِمِينَ",tr:"Lā ilāha illā anta subḥānaka innī kuntu mina ẓ-ẓālimīn",en:"There is no deity except You; exalted are You. Indeed, I have been of the wrongdoers",ctx:"Al-Anbiya 21:87 — dua of Yunus in the belly of the whale",cat:"Supplications",diff:"i"},
+  {id:28,ar:"رَبَّنَا تَقَبَّلْ مِنَّا إِنَّكَ أَنتَ السَّمِيعُ الْعَلِيمُ",tr:"Rabbanā taqabbal minnā innaka anta s-samīʿu l-ʿalīm",en:"Our Lord, accept from us. Indeed You are the Hearing, the Knowing",ctx:"Al-Baqarah 2:127 — dua of Ibrahim and Ismail building the Kaaba",cat:"Supplications",diff:"i"},
+  {id:29,ar:"وَمَا تَوْفِيقِي إِلَّا بِاللَّهِ",tr:"Wa-mā tawfīqī illā billāh",en:"My success is not but through Allah",ctx:"Hud 11:88",cat:"Key Verses",diff:"b"},
+  {id:30,ar:"إِنَّ اللَّهَ مَعَ الصَّابِرِينَ",tr:"Inna Allāha maʿa ṣ-ṣābirīn",en:"Indeed, Allah is with the patient",ctx:"Al-Baqarah 2:153",cat:"Key Verses",diff:"b"},
+  {id:31,ar:"فَاذْكُرُونِي أَذْكُرْكُمْ",tr:"Fadhkurūnī adhkurkum",en:"So remember Me; I will remember you",ctx:"Al-Baqarah 2:152",cat:"Key Verses",diff:"b"},
+  {id:32,ar:"وَنَحْنُ أَقْرَبُ إِلَيْهِ مِنْ حَبْلِ الْوَرِيدِ",tr:"Wa-naḥnu aqrabu ilayhi min ḥabli l-warīd",en:"And We are closer to him than his jugular vein",ctx:"Qaf 50:16 — the nearness of Allah to every person",cat:"Key Verses",diff:"i"},
+  {id:33,ar:"وَإِذَا سَأَلَكَ عِبَادِي عَنِّي فَإِنِّي قَرِيبٌ",tr:"Wa-idhā saʾalaka ʿibādī ʿannī fa-innī qarīb",en:"And when My servants ask about Me — indeed I am near",ctx:"Al-Baqarah 2:186",cat:"Key Verses",diff:"i"},
+  {id:34,ar:"إِنَّا نَحْنُ نَزَّلْنَا الذِّكْرَ وَإِنَّا لَهُ لَحَافِظُونَ",tr:"Innā naḥnu nazzalnā dh-dhikra wa-innā lahū la-ḥāfiẓūn",en:"Indeed, it is We who sent down the Quran and We will be its guardian",ctx:"Al-Hijr 15:9 — Allah's promise to preserve the Quran",cat:"Key Verses",diff:"i"},
+  {id:35,ar:"إِنَّ اللَّهَ لَا يُغَيِّرُ مَا بِقَوْمٍ حَتَّى يُغَيِّرُوا مَا بِأَنفُسِهِمْ",tr:"Inna Allāha lā yughayyiru mā bi-qawmin ḥattā yughayyirū mā bi-anfusihim",en:"Allah will not change a people's condition until they change what is within themselves",ctx:"Ar-Rad 13:11 — the great principle of personal responsibility",cat:"Key Verses",diff:"a"},
+  {id:36,ar:"وَإِن تَعُدُّوا نِعْمَةَ اللَّهِ لَا تُحْصُوهَا",tr:"Wa-in taʿuddū niʿmata Allāhi lā tuḥṣūhā",en:"If you should count the favors of Allah, you could not enumerate them",ctx:"Ibrahim 14:34",cat:"Key Verses",diff:"a"},
+  {id:37,ar:"سُبْحَانَ اللَّهِ وَالْحَمْدُ لِلَّهِ وَلَا إِلَٰهَ إِلَّا اللَّهُ وَاللَّهُ أَكْبَرُ",tr:"Subḥāna Allāhi wal-ḥamdu lillāhi wa-lā ilāha illā Allāhu wa-Allāhu akbar",en:"Glory to Allah, praise to Allah, there is no god but Allah, and Allah is the Greatest",ctx:"The four best words after the Quran — Hadith",cat:"Daily Expressions",diff:"i"},
+  {id:38,ar:"اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ",tr:"Allāhumma ṣalli ʿalā Muḥammadin wa-ʿalā āli Muḥammad",en:"O Allah, send blessings upon Muhammad and the family of Muhammad",ctx:"Salawat — recited in tashahhud and constantly for blessings",cat:"Daily Expressions",diff:"i"},
+  {id:39,ar:"إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ",tr:"Innamā l-aʿmālu bi-n-niyyāt",en:"Actions are only by intentions",ctx:"First hadith in Bukhari's Sahih — foundation of Islamic ethics",cat:"Hadith",diff:"b"},
+  {id:40,ar:"تَبَسُّمُكَ فِي وَجْهِ أَخِيكَ صَدَقَةٌ",tr:"Tabasumuka fī wajhi akhīka ṣadaqa",en:"Your smile in the face of your brother is a charity",ctx:"Hadith — Tirmidhi",cat:"Hadith",diff:"b"},
+  {id:41,ar:"لَا تَغْضَبْ",tr:"Lā taghḍab",en:"Do not get angry",ctx:"The Prophet's ﷺ repeated advice when asked for counsel",cat:"Hadith",diff:"b"},
+  {id:42,ar:"طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ",tr:"Ṭalabu l-ʿilmi farīḍatun ʿalā kulli muslim",en:"Seeking knowledge is an obligation upon every Muslim",ctx:"Hadith — Ibn Majah",cat:"Hadith",diff:"i"},
+  {id:43,ar:"الدِّينُ النَّصِيحَةُ",tr:"Ad-dīnu n-naṣīḥa",en:"Religion is sincere advice / counsel",ctx:"Hadith — Muslim",cat:"Hadith",diff:"b"},
+  {id:44,ar:"خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ",tr:"Khayrukum man taʿallama l-Qurʾāna wa-ʿallamah",en:"The best of you are those who learn the Quran and teach it",ctx:"Hadith — Bukhari",cat:"Hadith",diff:"i"},
+  {id:45,ar:"الْمُسْلِمُ مَنْ سَلِمَ الْمُسْلِمُونَ مِنْ لِسَانِهِ وَيَدِهِ",tr:"Al-muslimu man salima l-muslimūna min lisānihi wa-yadih",en:"The Muslim is one from whose tongue and hand the Muslims are safe",ctx:"Hadith — Bukhari & Muslim",cat:"Hadith",diff:"i"},
+  {id:46,ar:"رَبَّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا",tr:"Rabbanā lā tuzigh qulūbanā baʿda idh hadaytanā",en:"Our Lord, let not our hearts deviate after You have guided us",ctx:"Al-Imran 3:8",cat:"Supplications",diff:"a"},
+  {id:47,ar:"رَبَّنَا إِنَّنَا آمَنَّا فَاغْفِرْ لَنَا ذُنُوبَنَا",tr:"Rabbanā innanā āmannā faghfir lanā dhunūbanā",en:"Our Lord, indeed we have believed, so forgive us our sins",ctx:"Al-Imran 3:16",cat:"Supplications",diff:"i"},
+  {id:48,ar:"رَبَّنَا لَا تُؤَاخِذْنَا إِن نَّسِينَا أَوْ أَخْطَأْنَا",tr:"Rabbanā lā tuʾākhidhnā in nasīnā aw akhṭaʾnā",en:"Our Lord, do not impose blame upon us if we forget or err",ctx:"Al-Baqarah 2:286",cat:"Supplications",diff:"i"},
+  {id:49,ar:"وَلَسَوْفَ يُعْطِيكَ رَبُّكَ فَتَرْضَى",tr:"Wa-la-sawfa yuʿṭīka rabbuka fa-tarḍā",en:"And your Lord is going to give you, and you will be satisfied",ctx:"Ad-Duha 93:5",cat:"Key Verses",diff:"i"},
+  {id:50,ar:"رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ",tr:"Rabbanā hab lanā min azwājinā wa-dhurriyyātinā qurrata aʿyun",en:"Our Lord, grant us from our spouses and offspring comfort to our eyes",ctx:"Al-Furqan 25:74 — dua for a righteous family",cat:"Supplications",diff:"a"},
+];
+
+const BADGES = [
+  {id:"first",icon:"🌱",title:"First Step",desc:"Review your first card",check:s=>s.total>=1},
+  {id:"goal",icon:"⭐",title:"Daily Goal",desc:"Complete 15 cards in one day",check:s=>s.best>=15},
+  {id:"s3",icon:"🔥",title:"Ignited",desc:"3-day streak",check:s=>s.streak>=3},
+  {id:"s7",icon:"🌙",title:"Weekly Devotion",desc:"7-day streak",check:s=>s.streak>=7},
+  {id:"s30",icon:"🕌",title:"Monthly Commitment",desc:"30-day streak",check:s=>s.streak>=30},
+  {id:"m10",icon:"📖",title:"Seeker",desc:"Master 10 cards",check:s=>s.mastered>=10},
+  {id:"m50",icon:"✨",title:"Scholar",desc:"Master 50 cards",check:s=>s.mastered>=50},
+  {id:"m100",icon:"💎",title:"Hafiz Path",desc:"Master 100 cards",check:s=>s.mastered>=100},
+  {id:"w25",icon:"🌿",title:"Vocabulary Grower",desc:"Review 25 word cards",check:s=>s.wrev>=25},
+  {id:"p10",icon:"📜",title:"Reciter",desc:"Review 10 phrase cards",check:s=>s.prev>=10},
+];
+
+const DIFF_LABEL = {b:"Beginner",i:"Intermediate",a:"Advanced"};
+const DIFF_CLS = {b:"diff-b",i:"diff-i",a:"diff-a"};
+const GOAL = 15;
+const TODAY = ()=>new Date().toDateString();
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let state = {
+  tab:"words", cat:"All", mode:"study", flipped:false,
+  curKey:null, cardData:{},
+  stats:{streak:0,lastDate:null,total:0,mastered:0,wrev:0,prev:0,best:0,xp:0,dailyCount:0,dailyDate:TODAY()},
+  quiz:null,
+};
+
+function save(){try{localStorage.setItem("qapp",JSON.stringify({cardData:state.cardData,stats:state.stats}))}catch(e){}}
+function load(){try{const d=JSON.parse(localStorage.getItem("qapp")||"{}");if(d.cardData)state.cardData=d.cardData;if(d.stats)state.stats={...state.stats,...d.stats}}catch(e){}}
+load();
+
+// ─── SM-2 ────────────────────────────────────────────────────────────────────
+function sm2(card,q){
+  let {reps=0,ef=2.5,interval=0,totalSeen=0}=card||{};
+  totalSeen++;
+  if(q<3){reps=0;interval=1;}
+  else{
+    if(reps===0)interval=1;
+    else if(reps===1)interval=6;
+    else interval=Math.round(interval*ef);
+    reps++;
+  }
+  ef=Math.max(1.3,ef+0.1-(5-q)*(0.08+(5-q)*0.02));
+  const d=new Date();d.setDate(d.getDate()+interval);
+  return{reps,ef,interval,nextDue:d.toDateString(),mastered:reps>=5&&interval>=21,totalSeen};
+}
+function isDue(cd){return!cd?.nextDue||new Date(cd.nextDue)<=new Date();}
+function ikey(tab,id){return `${tab[0]}-${id}`;}
+
+// ─── QUEUE ───────────────────────────────────────────────────────────────────
+function getQueue(){
+  const items=getFiltered();
+  const due=[],fresh=[];
+  for(const it of items){
+    const cd=state.cardData[ikey(state.tab,it.id)];
+    if(!cd?.nextDue)fresh.push(it);
+    else if(isDue(cd)&&!cd.mastered)due.push(it);
+  }
+  due.sort((a,b)=>new Date(state.cardData[ikey(state.tab,a.id)]?.nextDue)-new Date(state.cardData[ikey(state.tab,b.id)]?.nextDue));
+  return[...due,...fresh];
+}
+function getFiltered(){
+  const items=state.tab==="words"?WORDS:PHRASES;
+  return state.cat==="All"?items:items.filter(i=>i.cat===state.cat);
+}
+function getCats(){
+  const items=state.tab==="words"?WORDS:PHRASES;
+  return["All",...new Set(items.map(i=>i.cat))];
+}
+function getMastCount(){return Object.values(state.cardData).filter(c=>c.mastered).length;}
+function getDailyCount(){return state.stats.dailyDate===TODAY()?state.stats.dailyCount:0;}
+
+// ─── NOTIFICATIONS ───────────────────────────────────────────────────────────
+function notify(msg,type="ok"){
+  const c=document.getElementById("notif-container");
+  const el=document.createElement("div");
+  el.className=`notif ${type}`;el.textContent=msg;
+  c.innerHTML="";c.appendChild(el);
+  setTimeout(()=>{el.remove();},2800);
+}
+
+// ─── REVIEW ──────────────────────────────────────────────────────────────────
+function review(q){
+  const queue=getQueue();
+  if(!queue.length)return;
+  const cur=queue.find(i=>ikey(state.tab,i.id)===state.curKey)||queue[0];
+  if(!cur)return;
+  const key=ikey(state.tab,cur.id);
+  const prev=state.cardData[key]||{};
+  const next=sm2(prev,q);
+  const gainedMastery=next.mastered&&!prev.mastered;
+  state.cardData[key]=next;
+
+  const xpMap={0:5,1:10,3:15,5:20};
+  const s=state.stats;
+  const isToday=s.dailyDate===TODAY();
+  const newDaily=(isToday?s.dailyCount:0)+1;
+  const yd=new Date();yd.setDate(yd.getDate()-1);
+  const newStreak=s.lastDate===TODAY()?s.streak:(s.lastDate===yd.toDateString()?s.streak+1:1);
+
+  state.stats={
+    ...s,
+    xp:s.xp+(xpMap[q]||10),
+    total:s.total+1,
+    mastered:getMastCount()+(gainedMastery?1:0),
+    wrev:s.wrev+(state.tab==="words"?1:0),
+    prev:s.prev+(state.tab==="phrases"?1:0),
+    dailyCount:newDaily,dailyDate:TODAY(),
+    best:Math.max(s.best,newDaily),
+    streak:newStreak,lastDate:TODAY(),
+  };
+  save();
+
+  if(newDaily===GOAL)setTimeout(()=>notify("🎉 Daily goal reached! Allahu Akbar!","gold"),100);
+  if(gainedMastery)setTimeout(()=>notify("⭐ Card Mastered!","gold"),200);
+
+  // advance
+  const idx=queue.findIndex(i=>ikey(state.tab,i.id)===state.curKey);
+  const nextQueue=getQueue();
+  state.flipped=false;
+  if(nextQueue.length>0){
+    const nextItem=nextQueue[(idx+1)%nextQueue.length]||nextQueue[0];
+    state.curKey=ikey(state.tab,nextItem.id);
+  }else{state.curKey=null;}
+  render();
+}
+
+// ─── QUIZ ────────────────────────────────────────────────────────────────────
+function startQuiz(){
+  const pool=getFiltered();
+  if(pool.length<4){notify("Need 4+ items for a quiz","warn");return;}
+  const shuffled=[...pool].sort(()=>Math.random()-.5).slice(0,Math.min(10,pool.length));
+  const questions=shuffled.map(item=>{
+    const wrong=pool.filter(w=>w.id!==item.id).sort(()=>Math.random()-.5).slice(0,3);
+    return{item,opts:[...wrong,item].sort(()=>Math.random()-.5),correct:item.id};
+  });
+  state.quiz={questions,idx:0,score:0,ans:null,done:false};
+  state.mode="quiz";
+  render();
+}
+
+function answerQuiz(optId){
+  if(!state.quiz||state.quiz.ans!==null)return;
+  const ok=optId===state.quiz.questions[state.quiz.idx].correct;
+  if(ok){state.stats.xp+=15;state.stats.total+=1;}
+  state.quiz={...state.quiz,ans:optId,score:ok?state.quiz.score+1:state.quiz.score};
+  render();
+  setTimeout(()=>{
+    if(!state.quiz)return;
+    if(state.quiz.idx+1>=state.quiz.questions.length){state.quiz={...state.quiz,done:true};}
+    else{state.quiz={...state.quiz,idx:state.quiz.idx+1,ans:null};}
+    save();render();
+  },1100);
+}
+
+// ─── RENDER ──────────────────────────────────────────────────────────────────
+function render(){
+  const app=document.getElementById("app");
+  const queue=getQueue();
+  const mastCount=getMastCount();
+  const dailyCount=getDailyCount();
+  const level=Math.floor(state.stats.xp/500)+1;
+  const xpPct=((state.stats.xp%500)/500)*100;
+  const filtered=getFiltered();
+  const earnedBadges=BADGES.filter(b=>b.check({...state.stats,mastered:mastCount}));
+
+  // ensure curKey is valid
+  if(!state.curKey&&queue.length>0)state.curKey=ikey(state.tab,queue[0].id);
+  const cur=queue.find(i=>ikey(state.tab,i.id)===state.curKey)||queue[0];
+  const curCD=cur?(state.cardData[ikey(state.tab,cur.id)]||{}):null;
+  const isNew=!curCD?.nextDue;
+  const isMast=curCD?.mastered;
+
+  const cats=getCats();
+
+  // Good/Easy interval hints
+  const ef=curCD?.ef||2.5;
+  const intv=curCD?.interval||1;
+  const goodHint=`~${Math.max(1,Math.round(intv*ef))}d`;
+  const easyHint=`~${Math.max(1,Math.round(intv*ef*1.3))}d`;
+
+  app.innerHTML=`
+    <div class="hdr">
+      <div class="hdr-row">
+        <div>
+          <div class="logo">القرآن</div>
+          <div class="logo-sub">Quranic Vocabulary</div>
+        </div>
+        <div class="chips">
+          <div class="chip chip-fire">🔥 ${state.stats.streak}-day</div>
+          <div class="chip chip-xp">⭐ Lv${level} <span class="xpbar-outer"><span class="xpbar-inner" style="width:${xpPct}%"></span></span></div>
+          <div class="chip chip-badge" id="open-badges">🏆 ${earnedBadges.length}/${BADGES.length}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="goal-wrap">
+      <div class="goal-top">
+        <span class="goal-lbl">📖 Daily Goal — 15 cards minimum</span>
+        <span class="goal-cnt">${dailyCount}/${GOAL}</span>
+      </div>
+      <div class="gtrack"><div class="gfill${dailyCount>=GOAL?" done":""}" style="width:${Math.min(100,(dailyCount/GOAL)*100)}%"></div></div>
+      ${dailyCount>=GOAL?'<div class="gdone">✨ Goal achieved! Masha\'Allah! ✨</div>':""}
+    </div>
+
+    <div class="ayah-card">
+      <div class="ayah-ar">وَاعْبُدْ رَبَّكَ حَتَّىٰ يَأْتِيَكَ الْيَقِينُ</div>
+      <div class="ayah-en">"And worship your Lord until certainty (death) comes to you"</div>
+      <div class="ayah-src">Al-Hijr 15:99</div>
+    </div>
+
+    <div class="tabs">
+      <button class="tbtn${state.tab==="words"?" on":""}" id="tab-words">📖 Words (${WORDS.length})</button>
+      <button class="tbtn${state.tab==="phrases"?" on":""}" id="tab-phrases">📜 Phrases (${PHRASES.length})</button>
+    </div>
+
+    <div class="mbar">
+      <button class="mbtn${state.mode==="study"?" on":""}" id="mode-study">Study</button>
+      <button class="mbtn" id="mode-quiz">Quiz</button>
+      <div class="qbadge"><div class="qdot"></div>${queue.length} due</div>
+    </div>
+
+    <div class="filts">
+      ${cats.map(c=>`<button class="filt${state.cat===c?" on":""}" data-cat="${c}">${c}</button>`).join("")}
+    </div>
+
+    <div class="srstats">
+      <div class="srstat"><div class="srnum">${queue.length}</div><div class="srlbl">Due Now</div></div>
+      <div class="srstat"><div class="srnum">${mastCount}</div><div class="srlbl">Mastered</div></div>
+      <div class="srstat"><div class="srnum">${state.stats.total}</div><div class="srlbl">Reviewed</div></div>
+    </div>
+
+    <div class="main">${renderMain(cur,curCD,isNew,isMast,filtered,mastCount,goodHint,easyHint)}</div>
+  `;
+  attachEvents();
+}
+
+function renderMain(cur,curCD,isNew,isMast,filtered,mastCount,goodHint,easyHint){
+  if(state.mode==="quiz")return renderQuiz();
+
+  if(!cur)return`<div class="empty"><h3>All Caught Up 🌿</h3><p>No cards due right now. Come back tomorrow for your scheduled reviews.</p></div>`;
+
+  const isPhrase=state.tab==="phrases";
+  const mastPct=Math.round(mastCount/Math.max(1,filtered.length)*100);
+
+  let diffTag="";
+  if(isPhrase){
+    const dc=DIFF_CLS[cur.diff]||"diff-b";
+    diffTag=`<div class="cdiff ${dc}">${DIFF_LABEL[cur.diff]||""}</div>`;
+  }
+  let freqTag=(!isPhrase&&cur.freq)?`<div class="cfreq">×${cur.freq}</div>`:"";
+  let badge=isNew?`<div class="cbadge bnew">New</div>`:isMast?`<div class="cbadge bmast">⭐ Mastered</div>`:`<div class="cbadge brev">Review</div>`;
+
+  let cardInner="";
+  if(!state.flipped){
+    const seen=curCD?.totalSeen>0?`<div class="cseen">Seen ${curCD.totalSeen}× · interval ${curCD.interval||1}d</div>`:"";
+    const ar=isPhrase?`<div class="carp">${cur.ar}</div>`:`<div class="car">${cur.ar}</div>`;
+    cardInner=`<div class="ccat">${cur.cat}</div>${ar}<div class="ctr">${cur.tr}</div>${seen}<div class="chint">tap to reveal meaning</div>`;
+  }else{
+    const ctx=isPhrase&&cur.ctx?`<div class="cctx">${cur.ctx}</div>`:"";
+    const intLine=!isNew?`<div class="cint">Current interval: ${curCD?.interval||1}d</div>`:"";
+    cardInner=`<div class="cblbl">Meaning</div><div class="cen">${cur.en}</div><div class="ctr">${cur.tr}</div>${ctx}${intLine}`;
+  }
+
+  const buttons=!state.flipped
+    ?`<div class="flrow"><button class="btn" id="btn-reveal">Reveal Meaning</button><button class="btn btn-skip" id="btn-skip">Skip</button></div>`
+    :`<div class="srbr">
+        <button class="srb again" data-q="0">Again<span>&lt;1d</span></button>
+        <button class="srb hard" data-q="1">Hard<span>~1d</span></button>
+        <button class="srb good" data-q="3">Good<span>${goodHint}</span></button>
+        <button class="srb easy" data-q="5">Easy<span>${easyHint}</span></button>
+      </div>`;
+
+  return`
+    <div class="pbwrap">
+      <div class="pbtop"><span>Mastered: ${mastCount}/${filtered.length}</span><span>${mastPct}%</span></div>
+      <div class="pbtrack"><div class="pbfill" style="width:${mastPct}%"></div></div>
+    </div>
+    <div class="card${isPhrase?" phrase-card":""}${isMast?" mast":""}" id="main-card">
+      ${badge}${freqTag}${diffTag}${cardInner}
+    </div>
+    ${buttons}
+  `;
+}
+
+function renderQuiz(){
+  const q=state.quiz;
+  if(!q)return"";
+  if(q.done){
+    const pct=q.score/q.questions.length;
+    const emoji=pct===1?"🏆":pct>=0.7?"🌟":"📖";
+    const msg=pct===1?"Perfect! Masha'Allah!":pct>=0.7?"Excellent — keep going!":"Keep practicing, you're growing!";
+    return`<div class="qresult">
+      <div class="remi">${emoji}</div>
+      <div class="rscore">${q.score}/${q.questions.length}</div>
+      <div class="rmsg">${msg}</div>
+      <div class="rbr">
+        <button class="btn btn-primary" id="quiz-again">Try Again</button>
+        <button class="btn" id="quiz-back">Back to Study</button>
+      </div>
+    </div>`;
+  }
+  const cur=q.questions[q.idx];
+  const isPhrase=state.tab==="phrases";
+  const opts=cur.opts.map(opt=>{
+    let cls="qopt";
+    if(q.ans!==null){
+      if(opt.id===cur.correct)cls+=" correct";
+      else if(opt.id===q.ans)cls+=" wrong";
+    }
+    const label=opt.en.length>55?opt.en.substring(0,55)+"…":opt.en;
+    return`<button class="${cls}" data-oid="${opt.id}"${q.ans!==null?" disabled":""}>${label}</button>`;
+  }).join("");
+  const ar=isPhrase?`<div class="qarp">${cur.item.ar}</div>`:`<div class="qar">${cur.item.ar}</div>`;
+  return`
+    <div class="qhdr">
+      <div class="qscore-lbl">⭐ ${q.score}/${q.questions.length}</div>
+      <div class="qprog">Q${q.idx+1} of ${q.questions.length}</div>
+    </div>
+    <div class="qcard">${ar}<div class="qtr">${cur.item.tr}</div><div class="qlbl">What does this mean?</div></div>
+    <div class="qopts">${opts}</div>
+  `;
+}
+
+function renderBadges(){
+  const mastCount=getMastCount();
+  const items=BADGES.map(b=>{
+    const ok=b.check({...state.stats,mastered:mastCount});
+    return`<div class="bitem${ok?" earn":""}"><div class="bicon">${b.icon}</div><div><div class="bname">${b.title}</div><div class="bdesc">${b.desc}</div></div></div>`;
+  }).join("");
+  const ov=document.createElement("div");
+  ov.className="bov";ov.id="badges-overlay";
+  ov.innerHTML=`<div class="bsheet"><div class="btitle">🏆 Achievements</div><div class="bgrid">${items}</div><button class="btn" id="close-badges" style="width:100%;margin-top:14px">Close</button></div>`;
+  document.body.appendChild(ov);
+  ov.querySelector("#close-badges").onclick=()=>ov.remove();
+  ov.onclick=e=>{if(e.target===ov)ov.remove();};
+}
+
+// ─── EVENT WIRING ─────────────────────────────────────────────────────────────
+function attachEvents(){
+  const $=id=>document.getElementById(id);
+
+  $("tab-words")?.addEventListener("click",()=>{state.tab="words";state.cat="All";state.mode="study";state.flipped=false;state.curKey=null;render();});
+  $("tab-phrases")?.addEventListener("click",()=>{state.tab="phrases";state.cat="All";state.mode="study";state.flipped=false;state.curKey=null;render();});
+  $("mode-study")?.addEventListener("click",()=>{state.mode="study";state.flipped=false;render();});
+  $("mode-quiz")?.addEventListener("click",startQuiz);
+  $("open-badges")?.addEventListener("click",renderBadges);
+  $("btn-reveal")?.addEventListener("click",()=>{state.flipped=true;render();});
+  $("btn-skip")?.addEventListener("click",()=>{
+    const queue=getQueue();
+    const idx=queue.findIndex(i=>ikey(state.tab,i.id)===state.curKey);
+    if(queue.length>0){const next=queue[(idx+1)%queue.length];state.curKey=ikey(state.tab,next.id);}
+    state.flipped=false;render();
+  });
+  $("main-card")?.addEventListener("click",e=>{
+    if(!state.flipped&&!e.target.closest("button")){state.flipped=true;render();}
+  });
+
+  document.querySelectorAll("[data-q]").forEach(btn=>{
+    btn.addEventListener("click",()=>review(parseInt(btn.dataset.q)));
+  });
+  document.querySelectorAll("[data-cat]").forEach(btn=>{
+    btn.addEventListener("click",()=>{state.cat=btn.dataset.cat;state.curKey=null;state.flipped=false;render();});
+  });
+  document.querySelectorAll("[data-oid]").forEach(btn=>{
+    btn.addEventListener("click",()=>answerQuiz(parseInt(btn.dataset.oid)));
+  });
+  $("quiz-again")?.addEventListener("click",startQuiz);
+  $("quiz-back")?.addEventListener("click",()=>{state.mode="study";state.quiz=null;render();});
+}
+
+document.getElementById("fab-badges").addEventListener("click",renderBadges);
+render();
+</script>
+</body>
+</html>
